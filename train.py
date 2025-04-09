@@ -18,6 +18,15 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.distributed import init_process_group, destroy_process_group, get_rank
 from torch.cuda import amp
 from dataset.get_next_points import get_next_points
+import warnings
+
+
+# 忽略更新，解决：ERROR:albumentations.check_version:Error fetching version info
+os.environ['NO_ALBUMENTATIONS_UPDATE'] = '1'
+# 忽略 UserWarning
+warnings.filterwarnings("ignore", category=UserWarning)
+
+
 parser = argparse.ArgumentParser(description='')
 parser.add_argument('--resume', default=None, type=str, help='path to latest checkpoint')
 parser.add_argument('--epochs', default=120, type=int)
@@ -53,9 +62,7 @@ logger_loss_idx = 1
 
 # log model and optimizer params
 # logger.info("Model details:"); logger.info(model)
-logger.info("datasets: load_all={}, compile={}.".format(config.load_all, config.compile))
-logger.info("Other hyperparameters:"); logger.info(args)
-print('batch size:', config.batch_size)
+
 
 
 
@@ -140,18 +147,19 @@ def init_models_optimizers(epochs, to_be_distributed):
 
 class Trainer:
     def __init__(
-        self, data_loaders, model_opt_lrsch,
+        self, data_loaders, model_opt_lrsch,max_num_next_clicks = 3,max_interactive_points =5 ,
     ):
         self.model, self.optimizer, self.lr_scheduler = model_opt_lrsch
-        self.train_loader, self.test_loaders = data_loaders
+        self.train_loader, self.val_loaders = data_loaders
         if config.out_ref:
             self.criterion_gdt = nn.BCELoss() if not config.use_fp16 else nn.BCEWithLogitsLoss()
 
-        self.max_num_next_clicks = 0
+        self.max_num_next_clicks = max_num_next_clicks
         self.prev_mask_drop_prob = 0.0
+        self.max_interactive_points = max_interactive_points
         # Setting Losses
         self.pix_loss = PixLoss()
-        self.cls_loss = ClsLoss()
+        # self.cls_loss = ClsLoss()
 
         # Others
         self.loss_log = AverageMeter()
@@ -182,8 +190,7 @@ class Trainer:
         )
         return optimizer_d, lr_scheduler_d, disc, adv_criterion
 
-
-    def _train_batch(self, batch,validation=False):
+    def _train_batch(self, batch):
 
         batch_data = {k: v.to(device) for k, v in batch.items()}
         inputs, gts = batch_data['images'], batch_data['instances']
@@ -191,136 +198,88 @@ class Trainer:
         # inputs = batch[0].to(device)
         # gts = batch[1].to(device)
         # class_labels = batch[2].to(device)
-        if config.use_fp16:
-            with amp.autocast(enabled=config.use_fp16, dtype=(torch.float16, torch.bfloat16)[0]):
-                scaled_preds, class_preds_lst = self.model(inputs)
-                if config.out_ref:
-                    (outs_gdt_pred, outs_gdt_label), scaled_preds = scaled_preds
-                    for _idx, (_gdt_pred, _gdt_label) in enumerate(zip(outs_gdt_pred, outs_gdt_label)):
-                        _gdt_pred = nn.functional.interpolate(_gdt_pred, size=_gdt_label.shape[2:], mode='bilinear', align_corners=True)#.sigmoid()
-                        # _gdt_label = _gdt_label.sigmoid()
-                        loss_gdt = self.criterion_gdt(_gdt_pred, _gdt_label) if _idx == 0 else self.criterion_gdt(_gdt_pred, _gdt_label) + loss_gdt
-                    # self.loss_dict['loss_gdt'] = loss_gdt.item()
-                if None in class_preds_lst:
-                    loss_cls = 0.
-                # else:
-                #     loss_cls = self.cls_loss(class_preds_lst, class_labels) * 1.0
-                #     self.loss_dict['loss_cls'] = loss_cls.item()
+        prev_mask = torch.zeros_like(inputs, dtype=torch.float32)[:, :1, :, :]
 
-                # Loss
-                loss_pix = self.pix_loss(scaled_preds, torch.clamp(gts, 0, 1)) * 1.0
-                self.loss_dict['loss_pix'] = loss_pix.item()
-                # since there may be several losses for sal, the lambdas for them (lambdas_pix) are inside the loss.py
-                loss = loss_pix + loss_cls
-                if config.out_ref:
-                    loss = loss + loss_gdt * 1.0
+        last_click_indx = None
+        with torch.no_grad():
+            num_iters = random.randint(0, self.max_num_next_clicks)
+            for click_indx in range(num_iters):
+                last_click_indx = click_indx
 
-                if config.lambda_adv_g:
-                    # gen
-                    valid = Variable(torch.cuda.FloatTensor(scaled_preds[-1].shape[0], 1).fill_(1.0), requires_grad=False).to(device)
-                    adv_loss_g = self.adv_criterion(self.disc(scaled_preds[-1] * inputs), valid) * config.lambda_adv_g
-                    loss += adv_loss_g
-                    self.loss_dict['loss_adv'] = adv_loss_g.item()
-                    self.disc_update_for_odd += 1
-            # self.loss_log.update(loss.item(), inputs.size(0))
-            # self.optimizer.zero_grad()
-            # loss.backward()
-            # self.optimizer.step()
-            self.optimizer.zero_grad()
-            scaler.scale(loss).backward()
-            scaler.step(self.optimizer)
-            scaler.update()
+                # if not validation:
+                #     self.model.eval()
 
-            if config.lambda_adv_g and self.disc_update_for_odd % 2 == 0:
-                # disc
-                fake = Variable(torch.cuda.FloatTensor(scaled_preds[-1].shape[0], 1).fill_(0.0), requires_grad=False).to(device)
-                adv_loss_real = self.adv_criterion(self.disc(gts * inputs), valid)
-                adv_loss_fake = self.adv_criterion(self.disc(scaled_preds[-1].detach() * inputs.detach()), fake)
-                adv_loss_d = (adv_loss_real + adv_loss_fake) / 2 * config.lambda_adv_d
-                self.loss_dict['loss_adv_d'] = adv_loss_d.item()
-                # self.optimizer_d.zero_grad()
-                # adv_loss_d.backward()
-                # self.optimizer_d.step()
-                self.optimizer_d.zero_grad()
-                scaler.scale(adv_loss_d).backward()
-                scaler.step(self.optimizer_d)
-                scaler.update()
-        else:
-            prev_mask = torch.zeros_like(inputs, dtype=torch.float32)[:, :1, :, :]
+                visual_prompts = {'points': points, 'prev_mask': prev_mask}
+                prompt_feats = self.model.get_prompt_feats(inputs.shape, visual_prompts)
+                prev_mask = torch.sigmoid(self.model(inputs,
+                                                prompt_feats)[0][-1])
+                points = get_next_points(prev_mask, gts, points, click_indx+1)
 
-            last_click_indx = None
-            with torch.no_grad():
-                num_iters = random.randint(0, self.max_num_next_clicks)
-                for click_indx in range(num_iters):
-                    last_click_indx = click_indx
+                # if not validation:
+                #     self.model.train()
 
-                    if not validation:
-                        self.model.eval()
+            if self.prev_mask_drop_prob > 0 and last_click_indx is not None:
+                zero_mask = np.random.random(size=prev_mask.size(0)) < self.prev_mask_drop_prob
+                prev_mask[zero_mask] = torch.zeros_like(prev_mask[zero_mask])
+        batch_data['points'] = points
+        prompts = {'points': points, 'prev_mask': prev_mask}
+        prompt_feats = self.model.get_prompt_feats(inputs.shape, prompts)
+        scaled_preds, class_preds_lst = self.model(inputs,prompt_feats)
+        if config.out_ref:
+            (outs_gdt_pred, outs_gdt_label), scaled_preds = scaled_preds
+            for _idx, (_gdt_pred, _gdt_label) in enumerate(zip(outs_gdt_pred, outs_gdt_label)):
+                _gdt_pred = nn.functional.interpolate(_gdt_pred, size=_gdt_label.shape[2:], mode='bilinear', align_corners=True).sigmoid()
+                _gdt_label = _gdt_label.sigmoid()
+                loss_gdt = self.criterion_gdt(_gdt_pred, _gdt_label) if _idx == 0 else self.criterion_gdt(_gdt_pred, _gdt_label) + loss_gdt
+            # self.loss_dict['loss_gdt'] = loss_gdt.item()
+        # with torch.no_grad():
+        #     _out_image=scaled_preds[-1].sigmoid()
+        #     img = _out_image[0][0]
+        #     img[ img >= 0.5] = 255
+        #     img[ img < 0.5]  = 0
+        #     save_image(img, f'params/1.png')
+        if None in class_preds_lst:
+            loss_cls = 0.
+        # else:
+        #     loss_cls = self.cls_loss(class_preds_lst, class_labels) * 1.0
+        #     self.loss_dict['loss_cls'] = loss_cls.item()
 
-                    visual_prompts = {'points': points, 'prev_mask': prev_mask}
-                    prompt_feats = self.model.get_prompt_feats(inputs.shape, visual_prompts)
-                    prev_mask = torch.sigmoid(self.model(inputs,
-                                                    prompt_feats))
-                    points = get_next_points(prev_mask, gts, points, click_indx+1)
+        # Loss
+        loss_pix = self.pix_loss(scaled_preds, torch.clamp(gts, 0, 1)) * 1.0
+        self.loss_dict['loss_pix'] = loss_pix.item()
+        # since there may be several losses for sal, the lambdas for them (lambdas_pix) are inside the loss.py
+        loss = loss_pix + loss_cls
+        if config.out_ref:
+            loss = loss + loss_gdt * 1.0
 
-                    if not validation:
-                        self.net.train()
+        if config.lambda_adv_g:
+            # gen
+            valid = Variable(torch.cuda.FloatTensor(scaled_preds[-1].shape[0], 1).fill_(1.0), requires_grad=False).to(device)
+            adv_loss_g = self.adv_criterion(self.disc(scaled_preds[-1] * inputs), valid) * config.lambda_adv_g
+            loss += adv_loss_g
+            self.loss_dict['loss_adv'] = adv_loss_g.item()
+            self.disc_update_for_odd += 1
+        self.loss_log.update(loss.item(), inputs.size(0))
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
 
-                if self.prev_mask_drop_prob > 0 and last_click_indx is not None:
-                    zero_mask = np.random.random(size=prev_mask.size(0)) < self.prev_mask_drop_prob
-                    prev_mask[zero_mask] = torch.zeros_like(prev_mask[zero_mask])
-            batch_data['points'] = points
-            prompts = {'points': points, 'prev_mask': prev_mask}
-            prompt_feats = self.model.get_prompt_feats(inputs.shape, prompts)
-            scaled_preds, class_preds_lst = self.model(inputs,prompt_feats)
-            if config.out_ref:
-                (outs_gdt_pred, outs_gdt_label), scaled_preds = scaled_preds
-                for _idx, (_gdt_pred, _gdt_label) in enumerate(zip(outs_gdt_pred, outs_gdt_label)):
-                    _gdt_pred = nn.functional.interpolate(_gdt_pred, size=_gdt_label.shape[2:], mode='bilinear', align_corners=True).sigmoid()
-                    _gdt_label = _gdt_label.sigmoid()
-                    loss_gdt = self.criterion_gdt(_gdt_pred, _gdt_label) if _idx == 0 else self.criterion_gdt(_gdt_pred, _gdt_label) + loss_gdt
-                # self.loss_dict['loss_gdt'] = loss_gdt.item()
-            if None in class_preds_lst:
-                loss_cls = 0.
-            # else:
-            #     loss_cls = self.cls_loss(class_preds_lst, class_labels) * 1.0
-            #     self.loss_dict['loss_cls'] = loss_cls.item()
-
-            # Loss
-            loss_pix = self.pix_loss(scaled_preds, torch.clamp(gts, 0, 1)) * 1.0
-            self.loss_dict['loss_pix'] = loss_pix.item()
-            # since there may be several losses for sal, the lambdas for them (lambdas_pix) are inside the loss.py
-            loss = loss_pix + loss_cls
-            if config.out_ref:
-                loss = loss + loss_gdt * 1.0
-
-            if config.lambda_adv_g:
-                # gen
-                valid = Variable(torch.cuda.FloatTensor(scaled_preds[-1].shape[0], 1).fill_(1.0), requires_grad=False).to(device)
-                adv_loss_g = self.adv_criterion(self.disc(scaled_preds[-1] * inputs), valid) * config.lambda_adv_g
-                loss += adv_loss_g
-                self.loss_dict['loss_adv'] = adv_loss_g.item()
-                self.disc_update_for_odd += 1
-            self.loss_log.update(loss.item(), inputs.size(0))
-            self.optimizer.zero_grad()
-            loss.backward()
-            self.optimizer.step()
-
-            if config.lambda_adv_g and self.disc_update_for_odd % 2 == 0:
-                # disc
-                fake = Variable(torch.cuda.FloatTensor(scaled_preds[-1].shape[0], 1).fill_(0.0), requires_grad=False).to(device)
-                adv_loss_real = self.adv_criterion(self.disc(gts * inputs), valid)
-                adv_loss_fake = self.adv_criterion(self.disc(scaled_preds[-1].detach() * inputs.detach()), fake)
-                adv_loss_d = (adv_loss_real + adv_loss_fake) / 2 * config.lambda_adv_d
-                self.loss_dict['loss_adv_d'] = adv_loss_d.item()
-                self.optimizer_d.zero_grad()
-                adv_loss_d.backward()
-                self.optimizer_d.step()
+        if config.lambda_adv_g and self.disc_update_for_odd % 2 == 0:
+            # disc
+            fake = Variable(torch.cuda.FloatTensor(scaled_preds[-1].shape[0], 1).fill_(0.0), requires_grad=False).to(device)
+            adv_loss_real = self.adv_criterion(self.disc(gts * inputs), valid)
+            adv_loss_fake = self.adv_criterion(self.disc(scaled_preds[-1].detach() * inputs.detach()), fake)
+            adv_loss_d = (adv_loss_real + adv_loss_fake) / 2 * config.lambda_adv_d
+            self.loss_dict['loss_adv_d'] = adv_loss_d.item()
+            self.optimizer_d.zero_grad()
+            adv_loss_d.backward()
+            self.optimizer_d.step()
 
     def train_epoch(self, epoch):
         global logger_loss_idx
         self.model.train()
         self.loss_dict = {}
+        # 微调
         if epoch > args.epochs + config.finetune_last_epochs:
             if config.task == 'Matting':
                 self.pix_loss.lambdas_pix_last['mae'] *= 1
@@ -341,6 +300,7 @@ class Trainer:
                 for loss_name, loss_value in self.loss_dict.items():
                     info_loss += ', {}: {:.3f}'.format(loss_name, loss_value)
                 logger.info(' '.join((info_progress, info_loss)))
+
         info_loss = '@==Final== Epoch[{0}/{1}]  Training Loss: {loss.avg:.3f}  '.format(epoch, args.epochs, loss=self.loss_log)
         logger.info(info_loss)
 
@@ -349,9 +309,62 @@ class Trainer:
             self.lr_scheduler_d.step()
         return self.loss_log.avg
 
+    def val_epoch(self, epoch):
+        self.val_loss_dict = {}
+        self.model.eval()
+        for batch_idx, batch in enumerate(self.val_loaders):
+            self._val_epoch(batch)
+        info_progress = 'Epoch[{0}/{1}]].'.format(epoch, args.epochs)
+        info_loss = 'validation Losses'
+        for loss_name, loss_value in self.loss_dict.items():
+            info_loss += ', {}: {:.3f}'.format(loss_name, loss_value)
+        logger.info(' '.join((info_progress, info_loss)))
+
+    def _val_epoch(self, batch):
+        with torch.no_grad():
+            batch_data = {k: v.to(device) for k, v in batch.items()}
+            inputs, gts = batch_data['images'], batch_data['instances']
+            points = batch_data['points']
+
+            prev_mask = torch.zeros_like(inputs, dtype=torch.float32)[:, :1, :, :]
+
+            last_click_indx = None
+
+            num_iters = random.randint(0, self.max_num_next_clicks)
+            for click_indx in range(num_iters):
+                last_click_indx = click_indx
+
+                visual_prompts = {'points': points, 'prev_mask': prev_mask}
+                prompt_feats = self.model.get_prompt_feats(inputs.shape, visual_prompts)
+                prev_mask = torch.sigmoid(self.model(inputs,
+                                                prompt_feats)[-1])
+                points = get_next_points(prev_mask, gts, points, click_indx+1)
+
+            if self.prev_mask_drop_prob > 0 and last_click_indx is not None:
+                zero_mask = np.random.random(size=prev_mask.size(0)) < self.prev_mask_drop_prob
+                prev_mask[zero_mask] = torch.zeros_like(prev_mask[zero_mask])
+
+            batch_data['points'] = points
+            prompts = {'points': points, 'prev_mask': prev_mask}
+            prompt_feats = self.model.get_prompt_feats(inputs.shape, prompts)
+            scaled_preds = self.model(inputs, prompt_feats)
+            if config.out_ref:
+                (outs_gdt_pred, outs_gdt_label), scaled_preds = scaled_preds
+                for _idx, (_gdt_pred, _gdt_label) in enumerate(zip(outs_gdt_pred, outs_gdt_label)):
+                    _gdt_pred = nn.functional.interpolate(_gdt_pred, size=_gdt_label.shape[2:], mode='bilinear', align_corners=True).sigmoid()
+                    _gdt_label = _gdt_label.sigmoid()
+                    loss_gdt = self.criterion_gdt(_gdt_pred, _gdt_label) if _idx == 0 else self.criterion_gdt(_gdt_pred, _gdt_label) + loss_gdt
+
+            # Loss
+            loss_pix = self.pix_loss(scaled_preds, torch.clamp(gts, 0, 1)) * 1.0
+            self.val_loss_dict['loss_pix'] = loss_pix.item()
+
 
 def main():
     from dataloader import init_dataloader
+    logger.info("datasets: load_all={}, compile={}.".format(config.load_all, config.compile))
+    logger.info("Other hyperparameters:"); logger.info(args)
+    print('batch size:', config.batch_size)
     trainer = Trainer(
         data_loaders=init_dataloader(to_be_distributed),
         model_opt_lrsch=init_models_optimizers(args.epochs, to_be_distributed)
@@ -359,6 +372,8 @@ def main():
 
     for epoch in range(epoch_st, args.epochs+1):
         train_loss = trainer.train_epoch(epoch)
+        if epoch % 5 == 0:
+            trainer.val_epoch(epoch)
         # Save checkpoint
         # DDP
         if epoch >= args.epochs - config.save_last and epoch % config.save_step == 0:
@@ -368,6 +383,7 @@ def main():
             )
     if to_be_distributed:
         destroy_process_group()
+
 
 if __name__ == '__main__':
     main()

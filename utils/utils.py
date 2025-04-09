@@ -16,6 +16,7 @@ from PIL import Image
 # logger.setLevel(logging.INFO)
 # logger.addHandler(handler)
 
+
 def path_to_image(path, size=(1024, 1024), color_type=['rgb', 'gray'][0]):
     if color_type.lower() == 'rgb':
         image = cv2.imread(path)
@@ -33,7 +34,6 @@ def path_to_image(path, size=(1024, 1024), color_type=['rgb', 'gray'][0]):
     return image
 
 
-
 def check_state_dict(state_dict, unwanted_prefix='_orig_mod.'):
     for k, v in list(state_dict.items()):
         if k.startswith(unwanted_prefix):
@@ -47,11 +47,10 @@ def generate_smoothed_gt(gts):
     return new_gts
 
 
-
 class Logger():
     def __init__(self, path="log.txt"):
         self.logger = logging.getLogger('BiRefNet')
-        self.file_handler = logging.FileHandler(path, "w")
+        self.file_handler = logging.FileHandler(path, "a")
         self.stdout_handler = logging.StreamHandler()
         self.stdout_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
         self.file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
@@ -67,7 +66,7 @@ class Logger():
         self.file_handler.close()
         self.stdout_handler.close()
 
-logger = Logger()
+logger = None
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""

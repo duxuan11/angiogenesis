@@ -196,7 +196,6 @@ class BiRefNet(
 
         point_mask = self.dist_maps(prev_mask.shape, points)
         prompt_mask = torch.cat((prev_mask, point_mask), dim=1)
-        print(torch.max(prompt_mask))
         #prompt_feats = self.visual_prompts_encoder(prompt_mask)
 
         # if keep_shape: # BNC -> BCHW

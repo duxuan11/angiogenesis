@@ -11,6 +11,7 @@ Image.MAX_IMAGE_PIXELS = None       # remove DecompressionBombWarning
 config = Config()
 import numpy as np
 
+
 class Datasets(ISDataset):
     def __init__(self, dataset_path, is_train=True, split='train'
                  , **kwargs) -> None:
@@ -31,8 +32,8 @@ class Datasets(ISDataset):
 
         dis_val = {
             "name": "DIS5K-VD",
-            "im_dir": "DIS5K/train/im",
-            "gt_dir": "DIS5K/train/gt"}
+            "im_dir": "DIS5K/val/im",
+            "gt_dir": "DIS5K/val/gt"}
 
         if split == 'train':
             self.datasets = [dis_train]
@@ -49,7 +50,6 @@ class Datasets(ISDataset):
         assert len(self.dataset_samples) > 0
 
         assert len(self.dataset_samples) > 0
-
 
     def get_sample(self, index) -> DSample:
         image_name, idx = self.dataset_samples[index]

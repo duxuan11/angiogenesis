@@ -7,7 +7,7 @@ class Config():
         # PATH settings
         # Make up your file system as: SYS_HOME_DIR/codes/dis/BiRefNet, SYS_HOME_DIR/datasets/dis/xx, SYS_HOME_DIR/weights/xx
         self.sys_home_dir = [os.path.expanduser('~'), '/mnt/data'][0]   # Default, custom
-        self.data_root_dir = os.path.join('E:\\avatarget\\Git\\angiogenesis', 'data')
+        self.data_root_dir = os.path.join('E:\\avatarget\\Git\\angiogen\\angiogenesis', 'data')
 
         self.num_max_points = 24
 
@@ -56,7 +56,7 @@ class Config():
         self.dec_blk = ['BasicDecBlk', 'ResBlk'][0]
 
         # TRAINING settings
-        self.batch_size = 1
+        self.batch_size = 2
         self.finetune_last_epochs = [
             0,
             {
@@ -69,7 +69,7 @@ class Config():
             }[self.task]
         ][1]    # choose 0 to skip
         self.lr = (1e-4 if 'DIS5K' in self.task else 1e-5) * math.sqrt(self.batch_size / 4)     # DIS needs high lr to converge faster. Adapt the lr linearly
-        self.img_size = (512, 512) if self.task not in ['General-2K'] else (2560, 1440)   # wid, hei
+        self.img_size = (1024, 1024) if self.task not in ['General-2K'] else (2560, 1440)   # wid, hei
         self.num_workers = max(4, self.batch_size)          # will be decrease to min(it, batch_size) at the initialization of the data_loader
         self.workers = 1
         # Backbone settings
@@ -183,7 +183,8 @@ class Config():
                 lines = f.readlines()
                 self.save_last = int([l.strip() for l in lines if '"{}")'.format(self.task) in l and 'val_last=' in l][0].split('val_last=')[-1].split()[0])
                 self.save_step = int([l.strip() for l in lines if '"{}")'.format(self.task) in l and 'step=' in l][0].split('step=')[-1].split()[0])
-
+        self.save_last = 50
+        self.save_step = 5
 
 # Return task for choosing settings in shell scripts.
 if __name__ == '__main__':
