@@ -22,3 +22,668 @@ Parameter Group 0
 2025-04-09 09:06:00,918 INFO Epoch[1/120] Iter[20/24]. Training Losses, loss_pix: 32.975
 2025-04-09 09:06:04,269 INFO @==Final== Epoch[1/120]  Training Loss: 22.784  
 2025-04-09 09:06:12,844 INFO Epoch[2/120] Iter[0/24]. Training Losses, loss_pix: 14.647
+2025-04-13 20:12:57,014 INFO datasets: load_all=False, compile=False.
+2025-04-13 20:12:57,014 INFO Other hyperparameters:
+2025-04-13 20:12:57,014 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-13 20:13:29,558 INFO datasets: load_all=False, compile=False.
+2025-04-13 20:13:29,558 INFO Other hyperparameters:
+2025-04-13 20:13:29,558 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-13 20:13:31,637 INFO Optimizer details:
+2025-04-13 20:13:31,637 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-13 20:13:31,637 INFO Scheduler details:
+2025-04-13 20:13:31,637 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x000002DD75573AC0>
+2025-04-13 20:14:57,507 INFO Epoch[1/120] Iter[0/12]. Training Losses, loss_pix: 28.340
+2025-04-13 21:14:42,768 INFO datasets: load_all=False, compile=False.
+2025-04-13 21:14:42,781 INFO Other hyperparameters:
+2025-04-13 21:14:42,781 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-13 21:14:44,825 INFO Optimizer details:
+2025-04-13 21:14:44,825 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-13 21:14:44,825 INFO Scheduler details:
+2025-04-13 21:14:44,825 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x00000291CE3A8B20>
+2025-04-13 22:43:46,361 INFO datasets: load_all=False, compile=False.
+2025-04-13 22:43:46,361 INFO Other hyperparameters:
+2025-04-13 22:43:46,362 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-13 22:43:47,284 INFO Optimizer details:
+2025-04-13 22:43:47,284 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-13 22:43:47,284 INFO Scheduler details:
+2025-04-13 22:43:47,284 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x0000028D6D992EF0>
+2025-04-13 22:44:46,824 INFO datasets: load_all=False, compile=False.
+2025-04-13 22:44:46,825 INFO Other hyperparameters:
+2025-04-13 22:44:46,825 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-13 22:44:47,611 INFO Optimizer details:
+2025-04-13 22:44:47,612 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-13 22:44:47,612 INFO Scheduler details:
+2025-04-13 22:44:47,612 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x0000026C15B02F50>
+2025-04-13 22:47:52,554 INFO datasets: load_all=False, compile=False.
+2025-04-13 22:47:52,554 INFO Other hyperparameters:
+2025-04-13 22:47:52,554 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-13 22:47:53,491 INFO Optimizer details:
+2025-04-13 22:47:53,491 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-13 22:47:53,491 INFO Scheduler details:
+2025-04-13 22:47:53,491 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x00000230EBE58D00>
+2025-04-13 22:49:44,271 INFO Epoch[1/120] Iter[0/12]. Training Losses, loss_pix: 28.341
+2025-04-14 10:51:59,364 INFO datasets: load_all=False, compile=False.
+2025-04-14 10:51:59,365 INFO Other hyperparameters:
+2025-04-14 10:51:59,365 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 10:52:00,289 INFO Optimizer details:
+2025-04-14 10:52:00,290 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 10:52:00,290 INFO Scheduler details:
+2025-04-14 10:52:00,290 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x000001EF19374E80>
+2025-04-14 10:55:59,521 INFO datasets: load_all=False, compile=False.
+2025-04-14 10:55:59,522 INFO Other hyperparameters:
+2025-04-14 10:55:59,522 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 10:56:00,392 INFO Optimizer details:
+2025-04-14 10:56:00,392 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 10:56:00,392 INFO Scheduler details:
+2025-04-14 10:56:00,392 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x000001B1C9004DC0>
+2025-04-14 10:57:27,766 INFO datasets: load_all=False, compile=False.
+2025-04-14 10:57:27,767 INFO Other hyperparameters:
+2025-04-14 10:57:27,767 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 10:57:28,657 INFO Optimizer details:
+2025-04-14 10:57:28,657 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 10:57:28,658 INFO Scheduler details:
+2025-04-14 10:57:28,658 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x000001A6F53ECDF0>
+2025-04-14 10:59:42,274 INFO datasets: load_all=False, compile=False.
+2025-04-14 10:59:42,274 INFO Other hyperparameters:
+2025-04-14 10:59:42,275 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 10:59:43,110 INFO Optimizer details:
+2025-04-14 10:59:43,110 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 10:59:43,111 INFO Scheduler details:
+2025-04-14 10:59:43,111 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x0000020806198D90>
+2025-04-14 11:01:19,606 INFO datasets: load_all=False, compile=False.
+2025-04-14 11:01:19,606 INFO Other hyperparameters:
+2025-04-14 11:01:19,607 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 11:01:20,499 INFO Optimizer details:
+2025-04-14 11:01:20,500 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 11:01:20,500 INFO Scheduler details:
+2025-04-14 11:01:20,501 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x000001BB82728D90>
+2025-04-14 11:06:40,659 INFO datasets: load_all=False, compile=False.
+2025-04-14 11:06:40,660 INFO Other hyperparameters:
+2025-04-14 11:06:40,660 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 11:06:41,521 INFO Optimizer details:
+2025-04-14 11:06:41,521 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 11:06:41,522 INFO Scheduler details:
+2025-04-14 11:06:41,522 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x0000020CFB954D90>
+2025-04-14 11:06:52,736 INFO Epoch[1/120] Iter[0/12]. Training Losses, loss_pix: 28.521
+2025-04-14 11:07:04,944 INFO @==Final== Epoch[1/120]  Training Loss: 26.875  
+2025-04-14 11:07:14,827 INFO Epoch[2/120] Iter[0/12]. Training Losses, loss_pix: 23.131
+2025-04-14 11:07:26,632 INFO @==Final== Epoch[2/120]  Training Loss: 26.004  
+2025-04-14 11:07:35,440 INFO Epoch[3/120] Iter[0/12]. Training Losses, loss_pix: 24.032
+2025-04-14 11:07:47,942 INFO @==Final== Epoch[3/120]  Training Loss: 24.957  
+2025-04-14 12:37:51,034 INFO datasets: load_all=False, compile=False.
+2025-04-14 12:37:51,035 INFO Other hyperparameters:
+2025-04-14 12:37:51,035 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 12:37:52,937 INFO Optimizer details:
+2025-04-14 12:37:52,938 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 12:37:52,938 INFO Scheduler details:
+2025-04-14 12:37:52,939 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x000001394430E2F0>
+2025-04-14 12:38:04,721 INFO Epoch[1/120] Iter[0/12]. Training Losses, loss_pix: 28.349
+2025-04-14 12:38:16,811 INFO @==Final== Epoch[1/120]  Training Loss: 27.020  
+2025-04-14 12:40:15,662 INFO datasets: load_all=False, compile=False.
+2025-04-14 12:40:15,663 INFO Other hyperparameters:
+2025-04-14 12:40:15,663 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 12:40:16,511 INFO Optimizer details:
+2025-04-14 12:40:16,512 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 12:40:16,512 INFO Scheduler details:
+2025-04-14 12:40:16,512 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x000001D860734E20>
+2025-04-14 12:40:27,681 INFO Epoch[1/120] Iter[0/12]. Training Losses, loss_pix: 28.387
+2025-04-14 12:40:39,747 INFO @==Final== Epoch[1/120]  Training Loss: 27.149  
+2025-04-14 12:41:54,879 INFO datasets: load_all=False, compile=False.
+2025-04-14 12:41:54,880 INFO Other hyperparameters:
+2025-04-14 12:41:54,880 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 12:41:55,847 INFO Optimizer details:
+2025-04-14 12:41:55,848 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 12:41:55,848 INFO Scheduler details:
+2025-04-14 12:41:55,848 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x0000024439348E50>
+2025-04-14 12:42:06,491 INFO Epoch[1/120] Iter[0/12]. Training Losses, loss_pix: 28.287
+2025-04-14 12:42:18,363 INFO @==Final== Epoch[1/120]  Training Loss: 26.884  
+2025-04-14 12:45:04,673 INFO datasets: load_all=False, compile=False.
+2025-04-14 12:45:04,673 INFO Other hyperparameters:
+2025-04-14 12:45:04,673 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 12:45:06,532 INFO Optimizer details:
+2025-04-14 12:45:06,533 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 12:45:06,533 INFO Scheduler details:
+2025-04-14 12:45:06,533 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x0000022456098EE0>
+2025-04-14 12:45:17,251 INFO Epoch[1/120] Iter[0/12]. Training Losses, loss_pix: 28.504
+2025-04-14 12:45:29,036 INFO @==Final== Epoch[1/120]  Training Loss: 26.781  
+2025-04-14 12:46:56,777 INFO datasets: load_all=False, compile=False.
+2025-04-14 12:46:56,778 INFO Other hyperparameters:
+2025-04-14 12:46:56,778 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 12:46:58,693 INFO Optimizer details:
+2025-04-14 12:46:58,694 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 12:46:58,694 INFO Scheduler details:
+2025-04-14 12:46:58,694 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x000001EDD3884E20>
+2025-04-14 12:47:10,076 INFO Epoch[1/120] Iter[0/12]. Training Losses, loss_pix: 28.211
+2025-04-14 12:47:22,067 INFO @==Final== Epoch[1/120]  Training Loss: 26.722  
+2025-04-14 12:47:48,506 INFO Epoch[2/120] Iter[0/12]. Training Losses, loss_pix: 27.801
+2025-04-14 12:48:00,677 INFO @==Final== Epoch[2/120]  Training Loss: 25.828  
+2025-04-14 12:48:10,093 INFO Epoch[3/120] Iter[0/12]. Training Losses, loss_pix: 24.143
+2025-04-14 12:48:22,720 INFO @==Final== Epoch[3/120]  Training Loss: 24.905  
+2025-04-14 12:48:32,478 INFO Epoch[4/120] Iter[0/12]. Training Losses, loss_pix: 23.054
+2025-04-14 12:48:46,626 INFO @==Final== Epoch[4/120]  Training Loss: 24.117  
+2025-04-14 12:48:55,897 INFO Epoch[5/120] Iter[0/12]. Training Losses, loss_pix: 19.976
+2025-04-14 12:49:09,454 INFO @==Final== Epoch[5/120]  Training Loss: 23.428  
+2025-04-14 12:49:28,749 INFO Epoch[5/120]]. validation Losses, loss_pix: 22.426
+2025-04-14 12:49:37,858 INFO Epoch[6/120] Iter[0/12]. Training Losses, loss_pix: 19.505
+2025-04-14 12:49:51,463 INFO @==Final== Epoch[6/120]  Training Loss: 22.856  
+2025-04-14 12:50:00,851 INFO Epoch[7/120] Iter[0/12]. Training Losses, loss_pix: 19.246
+2025-04-14 12:50:15,061 INFO @==Final== Epoch[7/120]  Training Loss: 22.354  
+2025-04-14 12:50:24,464 INFO Epoch[8/120] Iter[0/12]. Training Losses, loss_pix: 20.218
+2025-04-14 12:50:38,558 INFO @==Final== Epoch[8/120]  Training Loss: 21.832  
+2025-04-14 12:50:50,027 INFO Epoch[9/120] Iter[0/12]. Training Losses, loss_pix: 29.216
+2025-04-14 12:51:03,448 INFO @==Final== Epoch[9/120]  Training Loss: 21.477  
+2025-04-14 12:51:13,055 INFO Epoch[10/120] Iter[0/12]. Training Losses, loss_pix: 18.593
+2025-04-14 12:51:26,472 INFO @==Final== Epoch[10/120]  Training Loss: 21.174  
+2025-04-14 12:51:37,755 INFO Epoch[10/120]]. validation Losses, loss_pix: 18.236
+2025-04-14 12:51:48,020 INFO Epoch[11/120] Iter[0/12]. Training Losses, loss_pix: 14.750
+2025-04-14 12:52:02,224 INFO @==Final== Epoch[11/120]  Training Loss: 20.849  
+2025-04-14 12:52:12,009 INFO Epoch[12/120] Iter[0/12]. Training Losses, loss_pix: 16.164
+2025-04-14 12:52:48,984 INFO datasets: load_all=False, compile=False.
+2025-04-14 12:52:48,985 INFO Other hyperparameters:
+2025-04-14 12:52:48,985 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 12:52:50,185 INFO Optimizer details:
+2025-04-14 12:52:50,186 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 12:52:50,186 INFO Scheduler details:
+2025-04-14 12:52:50,187 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x000001EBC8A50E20>
+2025-04-14 12:53:01,561 INFO Epoch[1/120] Iter[0/12]. Training Losses, loss_pix: 28.055
+2025-04-14 12:54:46,621 INFO datasets: load_all=False, compile=False.
+2025-04-14 12:54:46,621 INFO Other hyperparameters:
+2025-04-14 12:54:46,623 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 12:54:47,602 INFO Optimizer details:
+2025-04-14 12:54:47,603 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 12:54:47,603 INFO Scheduler details:
+2025-04-14 12:54:47,604 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x000001D4C6E14DC0>
+2025-04-14 12:54:59,779 INFO Epoch[1/120] Iter[0/12]. Training Losses, loss_pix: 28.164
+2025-04-14 12:55:11,765 INFO @==Final== Epoch[1/120]  Training Loss: 26.789  
+2025-04-14 12:56:22,738 INFO datasets: load_all=False, compile=False.
+2025-04-14 12:56:22,740 INFO Other hyperparameters:
+2025-04-14 12:56:22,740 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 12:56:24,620 INFO Optimizer details:
+2025-04-14 12:56:24,621 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 12:56:24,621 INFO Scheduler details:
+2025-04-14 12:56:24,622 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x0000025584FF4E20>
+2025-04-14 12:56:35,399 INFO Epoch[1/120] Iter[0/12]. Training Losses, loss_pix: 28.282
+2025-04-14 12:56:47,066 INFO @==Final== Epoch[1/120]  Training Loss: 26.863  
+2025-04-14 12:56:57,444 INFO Epoch[2/120] Iter[0/12]. Training Losses, loss_pix: 23.290
+2025-04-14 12:57:09,409 INFO @==Final== Epoch[2/120]  Training Loss: 25.681  
+2025-04-14 12:57:44,346 INFO datasets: load_all=False, compile=False.
+2025-04-14 12:57:44,347 INFO Other hyperparameters:
+2025-04-14 12:57:44,347 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 12:57:46,350 INFO Optimizer details:
+2025-04-14 12:57:46,351 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 12:57:46,352 INFO Scheduler details:
+2025-04-14 12:57:46,352 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x000001A200504E20>
+2025-04-14 12:57:57,738 INFO Epoch[1/120] Iter[0/12]. Training Losses, loss_pix: 28.171
+2025-04-14 12:58:09,614 INFO @==Final== Epoch[1/120]  Training Loss: 26.975  
+2025-04-14 12:58:19,132 INFO Epoch[2/120] Iter[0/12]. Training Losses, loss_pix: 28.193
+2025-04-14 12:58:30,784 INFO @==Final== Epoch[2/120]  Training Loss: 26.189  
+2025-04-14 12:58:39,744 INFO Epoch[3/120] Iter[0/12]. Training Losses, loss_pix: 24.287
+2025-04-14 12:58:52,239 INFO @==Final== Epoch[3/120]  Training Loss: 25.202  
+2025-04-14 12:59:01,134 INFO Epoch[4/120] Iter[0/12]. Training Losses, loss_pix: 23.221
+2025-04-14 12:59:15,250 INFO @==Final== Epoch[4/120]  Training Loss: 24.305  
+2025-04-14 12:59:24,301 INFO Epoch[5/120] Iter[0/12]. Training Losses, loss_pix: 21.354
+2025-04-14 12:59:38,005 INFO @==Final== Epoch[5/120]  Training Loss: 23.662  
+2025-04-14 12:59:49,719 INFO Epoch[5/120]]. validation Losses, loss_pix: 20.499
+2025-04-14 12:59:58,105 INFO Epoch[6/120] Iter[0/12]. Training Losses, loss_pix: 21.034
+2025-04-14 13:00:11,545 INFO @==Final== Epoch[6/120]  Training Loss: 23.059  
+2025-04-14 13:00:20,510 INFO Epoch[7/120] Iter[0/12]. Training Losses, loss_pix: 19.623
+2025-04-14 13:00:34,598 INFO @==Final== Epoch[7/120]  Training Loss: 22.511  
+2025-04-14 13:00:43,491 INFO Epoch[8/120] Iter[0/12]. Training Losses, loss_pix: 20.091
+2025-04-14 13:00:57,861 INFO @==Final== Epoch[8/120]  Training Loss: 22.083  
+2025-04-14 13:01:07,505 INFO Epoch[9/120] Iter[0/12]. Training Losses, loss_pix: 25.314
+2025-04-14 13:01:21,407 INFO @==Final== Epoch[9/120]  Training Loss: 21.601  
+2025-04-14 13:01:30,683 INFO Epoch[10/120] Iter[0/12]. Training Losses, loss_pix: 18.327
+2025-04-14 13:01:44,183 INFO @==Final== Epoch[10/120]  Training Loss: 21.206  
+2025-04-14 13:01:55,437 INFO Epoch[10/120]]. validation Losses, loss_pix: 18.832
+2025-04-14 13:02:20,130 INFO datasets: load_all=False, compile=False.
+2025-04-14 13:02:20,131 INFO Other hyperparameters:
+2025-04-14 13:02:20,131 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 13:02:21,580 INFO Optimizer details:
+2025-04-14 13:02:21,580 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 13:02:21,581 INFO Scheduler details:
+2025-04-14 13:02:21,581 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x000001DD43474DC0>
+2025-04-14 13:02:32,728 INFO Epoch[1/120] Iter[0/12]. Training Losses, loss_pix: 28.597
+2025-04-14 13:02:44,720 INFO @==Final== Epoch[1/120]  Training Loss: 26.808  
+2025-04-14 13:02:54,985 INFO Epoch[2/120] Iter[0/12]. Training Losses, loss_pix: 26.441
+2025-04-14 13:03:06,988 INFO @==Final== Epoch[2/120]  Training Loss: 25.900  
+2025-04-14 13:03:16,380 INFO Epoch[3/120] Iter[0/12]. Training Losses, loss_pix: 25.397
+2025-04-14 13:03:29,092 INFO @==Final== Epoch[3/120]  Training Loss: 25.116  
+2025-04-14 13:03:38,764 INFO Epoch[4/120] Iter[0/12]. Training Losses, loss_pix: 22.178
+2025-04-14 13:03:53,021 INFO @==Final== Epoch[4/120]  Training Loss: 24.195  
+2025-04-14 13:04:02,344 INFO Epoch[5/120] Iter[0/12]. Training Losses, loss_pix: 19.906
+2025-04-14 13:04:16,128 INFO @==Final== Epoch[5/120]  Training Loss: 23.597  
+2025-04-14 13:04:28,876 INFO Epoch[5/120]]. validation Losses, loss_pix: 23.201
+2025-04-14 13:04:38,350 INFO Epoch[6/120] Iter[0/12]. Training Losses, loss_pix: 18.158
+2025-04-14 13:04:51,898 INFO @==Final== Epoch[6/120]  Training Loss: 22.908  
+2025-04-14 13:05:02,125 INFO Epoch[7/120] Iter[0/12]. Training Losses, loss_pix: 18.867
+2025-04-14 13:05:16,340 INFO @==Final== Epoch[7/120]  Training Loss: 22.286  
+2025-04-14 13:05:25,126 INFO Epoch[8/120] Iter[0/12]. Training Losses, loss_pix: 17.603
+2025-04-14 13:05:39,429 INFO @==Final== Epoch[8/120]  Training Loss: 21.750  
+2025-04-14 13:05:49,716 INFO Epoch[9/120] Iter[0/12]. Training Losses, loss_pix: 33.547
+2025-04-14 13:06:03,611 INFO @==Final== Epoch[9/120]  Training Loss: 21.355  
+2025-04-14 13:06:13,101 INFO Epoch[10/120] Iter[0/12]. Training Losses, loss_pix: 20.445
+2025-04-14 13:06:26,555 INFO @==Final== Epoch[10/120]  Training Loss: 20.989  
+2025-04-14 13:06:38,387 INFO Epoch[10/120]]. validation Losses, loss_pix: 17.131
+2025-04-14 13:06:48,691 INFO Epoch[11/120] Iter[0/12]. Training Losses, loss_pix: 13.672
+2025-04-14 13:07:02,911 INFO @==Final== Epoch[11/120]  Training Loss: 20.583  
+2025-04-14 13:07:13,309 INFO Epoch[12/120] Iter[0/12]. Training Losses, loss_pix: 14.778
+2025-04-14 13:07:24,576 INFO @==Final== Epoch[12/120]  Training Loss: 20.280  
+2025-04-14 13:07:35,878 INFO Epoch[13/120] Iter[0/12]. Training Losses, loss_pix: 38.088
+2025-04-14 13:07:50,480 INFO @==Final== Epoch[13/120]  Training Loss: 20.026  
+2025-04-14 13:08:00,654 INFO Epoch[14/120] Iter[0/12]. Training Losses, loss_pix: 14.212
+2025-04-14 13:08:13,298 INFO @==Final== Epoch[14/120]  Training Loss: 19.779  
+2025-04-14 13:08:22,674 INFO Epoch[15/120] Iter[0/12]. Training Losses, loss_pix: 15.360
+2025-04-14 13:08:35,781 INFO @==Final== Epoch[15/120]  Training Loss: 19.550  
+2025-04-14 13:11:39,446 INFO datasets: load_all=False, compile=False.
+2025-04-14 13:11:39,446 INFO Other hyperparameters:
+2025-04-14 13:11:39,447 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 13:11:41,288 INFO Optimizer details:
+2025-04-14 13:11:41,289 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 13:11:41,290 INFO Scheduler details:
+2025-04-14 13:11:41,290 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x000002CD76AFBB20>
+2025-04-14 13:13:45,503 INFO datasets: load_all=False, compile=False.
+2025-04-14 13:13:45,504 INFO Other hyperparameters:
+2025-04-14 13:13:45,504 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 13:13:47,315 INFO Optimizer details:
+2025-04-14 13:13:47,315 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 13:13:47,315 INFO Scheduler details:
+2025-04-14 13:13:47,316 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x00000263C50BBB80>
+2025-04-14 13:17:01,615 INFO datasets: load_all=False, compile=False.
+2025-04-14 13:17:01,616 INFO Other hyperparameters:
+2025-04-14 13:17:01,616 INFO Namespace(resume=None, epochs=120, trainset='DIS5K', ckpt_dir='weights', testsets=[], dist=False)
+2025-04-14 13:17:03,420 INFO Optimizer details:
+2025-04-14 13:17:03,421 INFO AdamW (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    initial_lr: 7.071067811865475e-05
+    lr: 7.071067811865475e-05
+    maximize: False
+    weight_decay: 0.01
+)
+2025-04-14 13:17:03,421 INFO Scheduler details:
+2025-04-14 13:17:03,421 INFO <torch.optim.lr_scheduler.MultiStepLR object at 0x0000018178A13C10>
+2025-04-14 13:17:14,561 INFO Epoch[1/120] Iter[0/12]. Training Losses, loss_pix: 20.197
+2025-04-14 13:17:26,516 INFO @==Final== Epoch[1/120]  Training Loss: 19.590  
+2025-04-14 13:17:36,030 INFO Epoch[2/120] Iter[0/12]. Training Losses, loss_pix: 18.311
+2025-04-14 13:17:48,283 INFO @==Final== Epoch[2/120]  Training Loss: 19.140  
+2025-04-14 13:17:57,231 INFO Epoch[3/120] Iter[0/12]. Training Losses, loss_pix: 14.931
+2025-04-14 13:18:10,093 INFO @==Final== Epoch[3/120]  Training Loss: 18.802  
+2025-04-14 13:18:19,034 INFO Epoch[4/120] Iter[0/12]. Training Losses, loss_pix: 19.052
+2025-04-14 13:18:33,474 INFO @==Final== Epoch[4/120]  Training Loss: 18.554  
+2025-04-14 13:18:42,838 INFO Epoch[5/120] Iter[0/12]. Training Losses, loss_pix: 17.417
+2025-04-14 13:18:56,620 INFO @==Final== Epoch[5/120]  Training Loss: 18.365  
+2025-04-14 13:19:08,255 INFO Epoch[5/120]]. validation Losses, loss_pix: 17.843
+2025-04-14 13:19:17,419 INFO Epoch[6/120] Iter[0/12]. Training Losses, loss_pix: 17.399
+2025-04-14 13:19:31,154 INFO @==Final== Epoch[6/120]  Training Loss: 18.211  
+2025-04-14 13:19:40,009 INFO Epoch[7/120] Iter[0/12]. Training Losses, loss_pix: 18.079
+2025-04-14 13:19:54,539 INFO @==Final== Epoch[7/120]  Training Loss: 18.068  
+2025-04-14 13:20:03,593 INFO Epoch[8/120] Iter[0/12]. Training Losses, loss_pix: 16.660
+2025-04-14 13:20:17,822 INFO @==Final== Epoch[8/120]  Training Loss: 17.941  
+2025-04-14 13:20:26,974 INFO Epoch[9/120] Iter[0/12]. Training Losses, loss_pix: 16.497
+2025-04-14 13:20:41,427 INFO @==Final== Epoch[9/120]  Training Loss: 17.809  
+2025-04-14 13:20:51,800 INFO Epoch[10/120] Iter[0/12]. Training Losses, loss_pix: 15.836
+2025-04-14 13:21:05,316 INFO @==Final== Epoch[10/120]  Training Loss: 17.676  
+2025-04-14 13:21:17,623 INFO Epoch[10/120]]. validation Losses, loss_pix: 16.513
+2025-04-14 13:21:28,578 INFO Epoch[11/120] Iter[0/12]. Training Losses, loss_pix: 15.578
+2025-04-14 13:21:42,657 INFO @==Final== Epoch[11/120]  Training Loss: 17.522  
+2025-04-14 13:21:52,147 INFO Epoch[12/120] Iter[0/12]. Training Losses, loss_pix: 15.327
+2025-04-14 13:22:03,645 INFO @==Final== Epoch[12/120]  Training Loss: 17.366  
+2025-04-14 13:22:14,045 INFO Epoch[13/120] Iter[0/12]. Training Losses, loss_pix: 14.771
+2025-04-14 13:22:28,642 INFO @==Final== Epoch[13/120]  Training Loss: 17.176  
+2025-04-14 13:22:38,350 INFO Epoch[14/120] Iter[0/12]. Training Losses, loss_pix: 15.741
+2025-04-14 13:22:51,262 INFO @==Final== Epoch[14/120]  Training Loss: 16.972  
+2025-04-14 13:23:00,361 INFO Epoch[15/120] Iter[0/12]. Training Losses, loss_pix: 15.186
+2025-04-14 13:23:13,725 INFO @==Final== Epoch[15/120]  Training Loss: 16.762  
+2025-04-14 13:23:25,264 INFO Epoch[15/120]]. validation Losses, loss_pix: 14.052
+2025-04-14 13:23:35,121 INFO Epoch[16/120] Iter[0/12]. Training Losses, loss_pix: 15.099
+2025-04-14 13:23:49,044 INFO @==Final== Epoch[16/120]  Training Loss: 16.573  
+2025-04-14 13:23:57,927 INFO Epoch[17/120] Iter[0/12]. Training Losses, loss_pix: 14.797
+2025-04-14 13:24:11,400 INFO @==Final== Epoch[17/120]  Training Loss: 16.382  
+2025-04-14 13:24:20,108 INFO Epoch[18/120] Iter[0/12]. Training Losses, loss_pix: 13.064
+2025-04-14 13:24:34,566 INFO @==Final== Epoch[18/120]  Training Loss: 16.193  
+2025-04-14 13:24:44,504 INFO Epoch[19/120] Iter[0/12]. Training Losses, loss_pix: 14.569
+2025-04-14 13:24:57,939 INFO @==Final== Epoch[19/120]  Training Loss: 16.022  
+2025-04-14 13:25:06,490 INFO Epoch[20/120] Iter[0/12]. Training Losses, loss_pix: 11.904
+2025-04-14 13:25:19,216 INFO @==Final== Epoch[20/120]  Training Loss: 15.852  
+2025-04-14 13:25:30,735 INFO Epoch[20/120]]. validation Losses, loss_pix: 12.918
+2025-04-14 13:25:39,679 INFO Epoch[21/120] Iter[0/12]. Training Losses, loss_pix: 14.252
+2025-04-14 13:25:52,821 INFO @==Final== Epoch[21/120]  Training Loss: 15.700  
+2025-04-14 13:26:01,883 INFO Epoch[22/120] Iter[0/12]. Training Losses, loss_pix: 12.273
+2025-04-14 13:26:14,597 INFO @==Final== Epoch[22/120]  Training Loss: 15.547  
+2025-04-14 13:26:23,072 INFO Epoch[23/120] Iter[0/12]. Training Losses, loss_pix: 11.840
+2025-04-14 13:26:36,859 INFO @==Final== Epoch[23/120]  Training Loss: 15.403  
+2025-04-14 13:26:46,056 INFO Epoch[24/120] Iter[0/12]. Training Losses, loss_pix: 11.490
+2025-04-14 13:27:00,038 INFO @==Final== Epoch[24/120]  Training Loss: 15.268  
+2025-04-14 13:27:08,483 INFO Epoch[25/120] Iter[0/12]. Training Losses, loss_pix: 12.823
+2025-04-14 13:27:21,522 INFO @==Final== Epoch[25/120]  Training Loss: 15.152  
+2025-04-14 13:27:33,323 INFO Epoch[25/120]]. validation Losses, loss_pix: 14.491
+2025-04-14 13:27:42,483 INFO Epoch[26/120] Iter[0/12]. Training Losses, loss_pix: 13.836
+2025-04-14 13:27:56,410 INFO @==Final== Epoch[26/120]  Training Loss: 15.034  
+2025-04-14 13:28:05,642 INFO Epoch[27/120] Iter[0/12]. Training Losses, loss_pix: 11.093
+2025-04-14 13:28:18,599 INFO @==Final== Epoch[27/120]  Training Loss: 14.927  
+2025-04-14 13:28:27,227 INFO Epoch[28/120] Iter[0/12]. Training Losses, loss_pix: 13.583
+2025-04-14 13:28:41,373 INFO @==Final== Epoch[28/120]  Training Loss: 14.823  
+2025-04-14 13:28:50,258 INFO Epoch[29/120] Iter[0/12]. Training Losses, loss_pix: 11.739
+2025-04-14 13:29:02,371 INFO @==Final== Epoch[29/120]  Training Loss: 14.729  
+2025-04-14 13:29:10,633 INFO Epoch[30/120] Iter[0/12]. Training Losses, loss_pix: 11.553
+2025-04-14 13:29:23,421 INFO @==Final== Epoch[30/120]  Training Loss: 14.639  
+2025-04-14 13:29:34,203 INFO Epoch[30/120]]. validation Losses, loss_pix: 12.458
+2025-04-14 13:29:43,204 INFO Epoch[31/120] Iter[0/12]. Training Losses, loss_pix: 12.680
+2025-04-14 13:29:56,950 INFO @==Final== Epoch[31/120]  Training Loss: 14.555  
+2025-04-14 13:30:05,816 INFO Epoch[32/120] Iter[0/12]. Training Losses, loss_pix: 12.584
+2025-04-14 13:30:19,694 INFO @==Final== Epoch[32/120]  Training Loss: 14.476  
+2025-04-14 13:30:28,204 INFO Epoch[33/120] Iter[0/12]. Training Losses, loss_pix: 14.118
+2025-04-14 13:30:40,854 INFO @==Final== Epoch[33/120]  Training Loss: 14.401  
+2025-04-14 13:30:50,244 INFO Epoch[34/120] Iter[0/12]. Training Losses, loss_pix: 12.298
+2025-04-14 13:31:03,102 INFO @==Final== Epoch[34/120]  Training Loss: 14.332  
+2025-04-14 13:31:11,803 INFO Epoch[35/120] Iter[0/12]. Training Losses, loss_pix: 11.770
+2025-04-14 13:31:25,554 INFO @==Final== Epoch[35/120]  Training Loss: 14.264  
+2025-04-14 13:31:36,251 INFO Epoch[35/120]]. validation Losses, loss_pix: 12.347
+2025-04-14 13:31:46,945 INFO Epoch[36/120] Iter[0/12]. Training Losses, loss_pix: 11.559
+2025-04-14 13:31:59,778 INFO @==Final== Epoch[36/120]  Training Loss: 14.203  
+2025-04-14 13:32:08,569 INFO Epoch[37/120] Iter[0/12]. Training Losses, loss_pix: 11.765

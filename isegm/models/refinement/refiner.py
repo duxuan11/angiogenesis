@@ -8,10 +8,10 @@ from torchvision.models import vgg16, vgg16_bn
 from torchvision.models import resnet50
 
 from config import Config
-from models.backbones.build_backbone import build_backbone
-from models.modules.decoder_blocks import BasicDecBlk
-from models.modules.lateral_blocks import BasicLatBlk
-from models.refinement.stem_layer import StemLayer
+from isegm.models.backbones.build_backbone import build_backbone
+from isegm.models.modules.decoder_blocks import BasicDecBlk
+from isegm.models.modules.lateral_blocks import BasicLatBlk
+from isegm.models.refinement.stem_layer import StemLayer
 
 
 class RefinerPVTInChannels4(nn.Module):

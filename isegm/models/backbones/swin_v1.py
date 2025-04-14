@@ -486,6 +486,7 @@ class SwinTransformer(nn.Module):
                  pretrain_img_size=224,
                  patch_size=4,
                  in_channels=3,
+                 in_coord_chans = 3,
                  embed_dim=96,
                  depths=[2, 2, 6, 2],
                  num_heads=[3, 6, 12, 24],
@@ -517,6 +518,9 @@ class SwinTransformer(nn.Module):
             patch_size=patch_size, in_channels=in_channels, embed_dim=embed_dim,
             norm_layer=norm_layer if self.patch_norm else None)
 
+        self.patch_embed_coords = PatchEmbed(
+            patch_size=patch_size, in_channels=in_coord_chans, embed_dim=embed_dim,
+            norm_layer=norm_layer if self.patch_norm else None)
         # absolute position embedding
         if self.ape:
             pretrain_img_size = to_2tuple(pretrain_img_size)
@@ -578,17 +582,19 @@ class SwinTransformer(nn.Module):
                 for param in m.parameters():
                     param.requires_grad = False
 
-
-    def forward(self, x):
+    def forward(self, x, coord_feature = None):
         """Forward function."""
         x = self.patch_embed(x)
+        if coord_feature is not None:
+            coords = self.patch_embed_coords(coord_feature)
+            x = x + coords
 
         Wh, Ww = x.size(2), x.size(3)
         if self.ape:
             # interpolate the position embedding to the corresponding size
             absolute_pos_embed = F.interpolate(self.absolute_pos_embed, size=(Wh, Ww), mode='bicubic')
             x = (x + absolute_pos_embed) # B Wh*Ww C
-            
+
         outs = []#x.contiguous()]
         x = x.flatten(2).transpose(1, 2)
         x = self.pos_drop(x)

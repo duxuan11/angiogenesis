@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from models.modules.deform_conv import DeformableConv2d
+from isegm.models.modules.deform_conv import DeformableConv2d
 from config import Config
 
 

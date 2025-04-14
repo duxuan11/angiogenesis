@@ -5,12 +5,12 @@ from kornia.filters import laplacian
 from huggingface_hub import PyTorchModelHubMixin
 
 from config import Config
-from models.backbones.build_backbone import build_backbone
-from models.modules.decoder_blocks import BasicDecBlk, ResBlk
-from models.modules.lateral_blocks import BasicLatBlk
-from models.modules.aspp import ASPP, ASPPDeformable
-from models.refinement.refiner import Refiner, RefinerPVTInChannels4, RefUNet
-from models.refinement.stem_layer import StemLayer
+from isegm.models.backbones.build_backbone import build_backbone
+from isegm.models.modules.decoder_blocks import BasicDecBlk, ResBlk
+from isegm.models.modules.lateral_blocks import BasicLatBlk
+from isegm.models.modules.aspp import ASPP, ASPPDeformable
+from isegm.models.refinement.refiner import Refiner, RefinerPVTInChannels4, RefUNet
+from isegm.models.refinement.stem_layer import StemLayer
 from utils.ops import DistMaps, BatchImageNormalize
 
 class_labels_TR_sorted = ["a","b","c"]
@@ -94,11 +94,11 @@ class BiRefNet(
                 if 'bb.' in key and 'refiner.' not in key:
                     value.requires_grad = False
 
-    def forward_enc(self, x):
+    def forward_enc(self, x, coord_features =None):
         if self.config.bb in ['vgg16', 'vgg16bn', 'resnet50']:
             x1 = self.bb.conv1(x); x2 = self.bb.conv2(x1); x3 = self.bb.conv3(x2); x4 = self.bb.conv4(x3)
         else:
-            x1, x2, x3, x4 = self.bb(x)
+            x1, x2, x3, x4 = self.bb(x, coord_features)
             if self.config.mul_scl_ipt == 'cat':
                 B, C, H, W = x.shape
                 x1_, x2_, x3_, x4_ = self.bb(F.interpolate(x, size=(H//2, W//2), mode='bilinear', align_corners=True))
@@ -128,9 +128,9 @@ class BiRefNet(
             )
         return (x1, x2, x3, x4), class_preds
 
-    def forward_ori(self, x):
+    def forward_ori(self, x, coord_features = None):
         ########## Encoder ##########
-        (x1, x2, x3, x4), class_preds = self.forward_enc(x)
+        (x1, x2, x3, x4), class_preds = self.forward_enc(x,coord_features)
         features = [x, x1, x2, x3, x4]
 
         if self.config.squeeze_block:
@@ -143,30 +143,30 @@ class BiRefNet(
         scaled_preds = self.decoder(features)
         return scaled_preds, class_preds
 
-    def fusion(self, image_feats, prompt_feats):
-        if self.fusion_type == 'naive':
-            return image_feats + prompt_feats
+    # def fusion(self, image_feats, prompt_feats):
+    #     if self.fusion_type == 'naive':
+    #         return image_feats + prompt_feats
 
-        elif self.fusion_type == 'cross_attention':
-            num_blocks = len(self.fusion_blocks)
-            for i in range(num_blocks):
-                image_feats, prompt_feats = self.fusion_blocks[i](
-                    image_feats, prompt_feats, keep_shape=True)
-            return image_feats
+    #     elif self.fusion_type == 'cross_attention':
+    #         num_blocks = len(self.fusion_blocks)
+    #         for i in range(num_blocks):
+    #             image_feats, prompt_feats = self.fusion_blocks[i](
+    #                 image_feats, prompt_feats, keep_shape=True)
+    #         return image_feats
 
-        elif self.fusion_type == 'self_attention':
-            image_feats = image_feats + prompt_feats
-            B, C, H, W = image_feats.shape
-            image_feats = image_feats.permute(0,2,3,1).contiguous().reshape(B,H*W,C)
+    #     elif self.fusion_type == 'self_attention':
+    #         image_feats = image_feats + prompt_feats
+    #         B, C, H, W = image_feats.shape
+    #         image_feats = image_feats.permute(0,2,3,1).contiguous().reshape(B,H*W,C)
 
-            num_blocks = len(self.fusion_blocks)
-            for i in range(num_blocks):
-                image_feats = self.fusion_blocks[i](image_feats)
-            image_feats = image_feats.transpose(1,2).contiguous().reshape(B,C,H,W)
-            return image_feats
+    #         num_blocks = len(self.fusion_blocks)
+    #         for i in range(num_blocks):
+    #             image_feats = self.fusion_blocks[i](image_feats)
+    #         image_feats = image_feats.transpose(1,2).contiguous().reshape(B,C,H,W)
+    #         return image_feats
 
-        else:
-            raise ValueError(f'Unsupported fusion type: {self.fusion_type}.')
+    #     else:
+    #         raise ValueError(f'Unsupported fusion type: {self.fusion_type}.')
 
     def get_prompt_feats(self,image_size, inputs,keep_shape=True):
         """Get feature representation for prompts
@@ -205,12 +205,12 @@ class BiRefNet(
         #     assert N == H*W
         #     prompt_feats = prompt_feats.transpose(1,2).contiguous()
         #     prompt_feats = prompt_feats.reshape(B, C, H, W)
-
+        #visualize_tensor(prompt_mask)
         return prompt_mask
 
-    def forward(self, image_feats, prompt_feats):
-        x = self.fusion(image_feats, prompt_feats)
-        scaled_preds, class_preds = self.forward_ori(x)
+    def forward(self, image_feats, coord_feats):
+        #x = self.fusion(image_feats, prompt_feats)
+        scaled_preds, class_preds = self.forward_ori(image_feats, coord_feats)
         class_preds_lst = [class_preds]
         return [scaled_preds, class_preds_lst] if self.training else scaled_preds
 
@@ -381,3 +381,36 @@ class SimpleConvs(nn.Module):
 
     def forward(self, x):
         return self.conv_out(self.conv1(x))
+
+
+
+def visualize_tensor(tensor, title="Image", denormalize=True):
+    """
+    可视化 PyTorch 张量图像
+    参数：
+        tensor : torch.Tensor (形状可为 [C, H, W] 或 [B, C, H, W])
+        title : 图像标题
+        denormalize : 是否反归一化（如果输入做过归一化预处理）
+    """
+    import matplotlib.pyplot as plt
+    # 将张量转换为 numpy 数组
+    image = tensor.detach().cpu().numpy()
+
+    # 处理 4D 批次张量 (取第一个样本)
+    if image.ndim == 4:
+        image = image[0]
+
+    # 调整通道顺序：CHW -> HWC
+    image = image.transpose(1, 2, 0)
+
+    # 反归一化（假设使用标准归一化 mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]）
+    # if denormalize:
+    #     image = image * [0.229, 0.224, 0.225] + [0.485, 0.456, 0.406]
+    #     image = image.clip(0, 1)  # 确保像素值在 [0,1] 之间
+
+    # 可视化
+    plt.figure(figsize=(8, 6))
+    plt.imshow(image)
+    plt.title(title)
+    plt.axis('off')
+    plt.show()

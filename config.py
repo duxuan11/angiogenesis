@@ -1,6 +1,6 @@
 import os
 import math
-
+from pathlib import Path
 
 class Config():
     def __init__(self) -> None:
@@ -10,7 +10,9 @@ class Config():
         self.data_root_dir = os.path.join('E:\\avatarget\\Git\\angiogen\\angiogenesis', 'data')
 
         self.num_max_points = 24
-
+        self.norm_radius = 5
+        self.VIS_PATH = Path("./otuput/vis/")
+        self.task_prefix = ""
         # TASK settings
         self.task = ['DIS5K', 'COD', 'HRSOD', 'General', 'General-2K', 'Matting'][0]
         self.testsets = {
@@ -69,7 +71,7 @@ class Config():
             }[self.task]
         ][1]    # choose 0 to skip
         self.lr = (1e-4 if 'DIS5K' in self.task else 1e-5) * math.sqrt(self.batch_size / 4)     # DIS needs high lr to converge faster. Adapt the lr linearly
-        self.img_size = (1024, 1024) if self.task not in ['General-2K'] else (2560, 1440)   # wid, hei
+        self.img_size = (512, 512) if self.task not in ['General-2K'] else (2560, 1440)   # wid, hei
         self.num_workers = max(4, self.batch_size)          # will be decrease to min(it, batch_size) at the initialization of the data_loader
         self.workers = 1
         # Backbone settings
@@ -138,6 +140,7 @@ class Config():
             self.lambdas_pix_last = {
                 # not 0 means opening this loss
                 # original rate -- 1 : 30 : 1.5 : 0.2, bce x 30
+                'NFL':30 * 1,
                 'bce': 30 * 1,          # high performance
                 'iou': 0.5 * 1,         # 0 / 255
                 'iou_patch': 0.5 * 0,   # 0 / 255, win_size = (64, 64)

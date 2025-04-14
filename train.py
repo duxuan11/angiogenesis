@@ -10,7 +10,7 @@ import numpy as np
 from config import Config
 from loss import PixLoss, ClsLoss
 from datasets import Datasets
-from models.birefnet import BiRefNet
+from isegm.models.birefnet import BiRefNet
 from utils.utils import Logger, AverageMeter, set_seed, check_state_dict
 
 from torch.utils.data.distributed import DistributedSampler
@@ -19,7 +19,8 @@ from torch.distributed import init_process_group, destroy_process_group, get_ran
 from torch.cuda import amp
 from dataset.get_next_points import get_next_points
 import warnings
-
+from utils.vis import draw_probmap, draw_points
+import cv2
 
 # 忽略更新，解决：ERROR:albumentations.check_version:Error fetching version info
 os.environ['NO_ALBUMENTATIONS_UPDATE'] = '1'
@@ -106,8 +107,8 @@ def init_data_loaders(to_be_distributed):
     return train_loader, test_loaders
 
 
-def init_models_optimizers(epochs, to_be_distributed):
-    model = BiRefNet(bb_pretrained=True)
+def init_models_optimizers(epochs,distributed, norm_radius= 5):
+    model = BiRefNet(bb_pretrained=True,norm_radius=norm_radius)
     if args.resume:
         if os.path.isfile(args.resume):
             logger.info("=> loading checkpoint '{}'".format(args.resume))
@@ -147,7 +148,7 @@ def init_models_optimizers(epochs, to_be_distributed):
 
 class Trainer:
     def __init__(
-        self, data_loaders, model_opt_lrsch,max_num_next_clicks = 3,max_interactive_points =5 ,
+        self, data_loaders, model_opt_lrsch,max_num_next_clicks = 3,max_interactive_points =24,
     ):
         self.model, self.optimizer, self.lr_scheduler = model_opt_lrsch
         self.train_loader, self.val_loaders = data_loaders
@@ -224,7 +225,7 @@ class Trainer:
         batch_data['points'] = points
         prompts = {'points': points, 'prev_mask': prev_mask}
         prompt_feats = self.model.get_prompt_feats(inputs.shape, prompts)
-        scaled_preds, class_preds_lst = self.model(inputs,prompt_feats)
+        scaled_preds, class_preds_lst = self.model(inputs, prompt_feats)
         if config.out_ref:
             (outs_gdt_pred, outs_gdt_label), scaled_preds = scaled_preds
             for _idx, (_gdt_pred, _gdt_label) in enumerate(zip(outs_gdt_pred, outs_gdt_label)):
@@ -275,6 +276,8 @@ class Trainer:
             adv_loss_d.backward()
             self.optimizer_d.step()
 
+        return batch_data, scaled_preds[-1]
+
     def train_epoch(self, epoch):
         global logger_loss_idx
         self.model.train()
@@ -292,7 +295,7 @@ class Trainer:
                 self.pix_loss.lambdas_pix_last['mae'] *= 0.9
 
         for batch_idx, batch in enumerate(self.train_loader):
-            self._train_batch(batch)
+            splitted_batch_data, outputs = self._train_batch(batch)
             # Logger
             if batch_idx % 20 == 0:
                 info_progress = 'Epoch[{0}/{1}] Iter[{2}/{3}].'.format(epoch, args.epochs, batch_idx, len(self.train_loader))
@@ -307,6 +310,16 @@ class Trainer:
         self.lr_scheduler.step()
         if config.lambda_adv_g:
             self.lr_scheduler_d.step()
+        global_step = 2
+        if epoch > 0 and \
+                    epoch % global_step == 0:
+                    vis_name = "epoch_"+str(epoch) + "_global_step_"
+                    self.save_visualization(
+                        splitted_batch_data, outputs, vis_name, global_step, prefix='train'
+                    )
+
+
+
         return self.loss_log.avg
 
     def val_epoch(self, epoch):
@@ -359,6 +372,43 @@ class Trainer:
             loss_pix = self.pix_loss(scaled_preds, torch.clamp(gts, 0, 1)) * 1.0
             self.val_loss_dict['loss_pix'] = loss_pix.item()
 
+    def save_visualization(self, splitted_batch_data, outputs,vis_name, global_step, prefix):
+        output_images_path = config.VIS_PATH / prefix
+        if config.task_prefix:
+            output_images_path /= config.task_prefix
+
+        if not output_images_path.exists():
+            output_images_path.mkdir(parents=True)
+        image_name_prefix = vis_name + f'{global_step:06d}'
+
+        def _save_image(suffix, image):
+            cv2.imwrite(str(output_images_path / f'{image_name_prefix}_{suffix}.jpg'),
+                        image, [cv2.IMWRITE_JPEG_QUALITY, 85])
+
+        images = splitted_batch_data['images']
+        points = splitted_batch_data['points']
+        instance_masks = splitted_batch_data['instances']
+
+        gt_instance_masks = instance_masks.cpu().numpy()
+        predicted_instance_masks = torch.sigmoid(outputs).detach().cpu().numpy()
+        points = points.detach().cpu().numpy()
+
+        image_blob, points = images[0], points[0]
+        gt_mask = np.squeeze(gt_instance_masks[0], axis=0)
+        predicted_mask = np.squeeze(predicted_instance_masks[0], axis=0)
+
+        image = image_blob.cpu().numpy() * 255
+        image = image.transpose((1, 2, 0))
+
+        image_with_points = draw_points(image, points[:self.max_interactive_points], (0, 255, 0))
+        image_with_points = draw_points(image_with_points, points[self.max_interactive_points:], (255, 0, 0))
+
+        gt_mask[gt_mask < 0] = 0.25
+        gt_mask = draw_probmap(gt_mask)
+        predicted_mask = draw_probmap(predicted_mask)
+        viz_image = np.hstack((image_with_points, gt_mask, predicted_mask)).astype(np.uint8)
+
+        _save_image('instance_segmentation', viz_image[:, :, ::-1])
 
 def main():
     from dataloader import init_dataloader
@@ -367,7 +417,7 @@ def main():
     print('batch size:', config.batch_size)
     trainer = Trainer(
         data_loaders=init_dataloader(to_be_distributed),
-        model_opt_lrsch=init_models_optimizers(args.epochs, to_be_distributed)
+        model_opt_lrsch=init_models_optimizers(args.epochs, distributed = to_be_distributed, norm_radius = config.norm_radius)
     )
 
     for epoch in range(epoch_st, args.epochs+1):
