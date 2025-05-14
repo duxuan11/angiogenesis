@@ -1,0 +1,31 @@
+{
+    // 使用 IntelliSense 了解相关属性。
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Python: Train Script",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "angiogenesis/train.py",
+            "args": ["angiogenesis/models/default/plainvit_base1024_finue_angiogenesis.py"],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}",  // 根据你的实际路径调整
+            "purpose": ["debug-in-terminal"]
+          },
+          {
+            "name": "Python: Demo Script",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "angiogenesis/demo.py",
+            "args": ["--checkpoint=vitb_sa2_cocolvis_hq44k_epoch_0.pth"],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}",  // 根据你的实际路径调整
+            "purpose": ["debug-in-terminal"]
+          }
+    ]
+}
