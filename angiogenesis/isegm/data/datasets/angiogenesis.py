@@ -19,7 +19,7 @@ class AngiogenesisDatasets(ISDataset):
         self.dataset_path = Path(dataset_path)
         self.data_size = (512,512)
         self.is_train = is_train
-        valid_extensions = ['.png', '.jpg', '.PNG', '.JPG', '.JPEG']
+        # valid_extensions = ['.png', '.jpg', '.PNG', '.JPG', '.JPEG']
 
         # train set: 44320 images
         bri_other_train = {
