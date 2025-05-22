@@ -7,6 +7,7 @@ from isegm.inference.predictor import BasePredictor
 from isegm.utils.vis import draw_with_blend_and_clicks
 
 
+
 class InteractiveController:
     def __init__(self, net, device, predictor_params, update_image_callback, prob_thresh=0.5):
         self.net = net
@@ -96,6 +97,39 @@ class InteractiveController:
         self._result_mask = self.result_mask
         self.object_count += 1
         self.reset_last_object()
+
+    def angiogenesis_analysis(self):
+        if self.current_object_prob is None:
+            return
+
+        self._result_mask = self.result_mask
+        self.morphologicalanalyzer = MorphologicalAnalyzer()
+        param_list = [
+            "Nb extrem",
+            "Nb nodes",
+            "Nb junctions",
+            "Nb master junction",
+            "Nb peaces",
+            "Nb master segments",
+            "Nb segments",
+            "Nb branches",
+            "Nb isol.seg",
+            "Tot length",
+            "Tot master segments length",
+            "Tot braching length",
+            "Tot segments length",
+            "Tot branches length",
+            "Tot isol branches length",
+            "Nb meshes",
+            "Tot meshes area",
+            "Mean meash size",
+            "Mesh index",
+            "Analysed area",
+            "Branching interval",]
+        result = self.morphologicalanalyzer.analyze(param_list, self._result_mask)
+        self.reset_last_object()
+
+
 
     def reset_last_object(self, update_image=True):
         self.states = []

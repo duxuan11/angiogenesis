@@ -9,7 +9,7 @@ from interface.canvas import CanvasImage
 from interface.controller import InteractiveController
 from interface.wrappers import BoundedNumericalEntry, FocusHorizontalScale, FocusCheckButton, \
     FocusButton, FocusLabelFrame
-
+from interface.analysis import MorphologicalAnalyzer
 
 class InteractiveDemoApp(ttk.Frame):
     def __init__(self, master, args, model):
@@ -17,7 +17,7 @@ class InteractiveDemoApp(ttk.Frame):
         self.master = master
         # 保存图像明称
         self.image_name = None
-        master.title("SegNext Demo")
+        master.title("Angiogenesis Demo")
         master.withdraw()
         master.update_idletasks()
         x = (master.winfo_screenwidth() - master.winfo_reqwidth()) / 2
@@ -31,7 +31,7 @@ class InteractiveDemoApp(ttk.Frame):
         self.controller = InteractiveController(model, args.device,
                                                 predictor_params={'brs_mode': 'NoBRS'},
                                                 update_image_callback=self._update_image)
-
+        self.morphologicalanalyzer = MorphologicalAnalyzer()
         self._init_state()
         self._add_menu()
         self._add_canvas()
@@ -117,6 +117,10 @@ class InteractiveDemoApp(ttk.Frame):
             FocusButton(self.clicks_options_frame, text='Reset clicks', bg='#ea9999', fg='black', width=10, height=2,
                         state=tk.DISABLED, command=self._reset_last_object)
         self.reset_clicks_button.pack(side=tk.LEFT, fill=tk.X, padx=10, pady=3)
+        self.angiogenesis_analysis_button = \
+            FocusButton(self.clicks_options_frame, text='analysis', bg='#b6d7a8', fg='black', width=10, height=2,
+                        state=tk.ACTIVE, command=self.morphological_analysis)
+        self.angiogenesis_analysis_button.pack(side=tk.LEFT, fill=tk.X, padx=10, pady=3)
 
         self.zoomin_options_frame = FocusLabelFrame(master, text="ZoomIn options")
         self.zoomin_options_frame.pack(side=tk.TOP, fill=tk.X, padx=10, pady=3)
@@ -138,10 +142,12 @@ class InteractiveDemoApp(ttk.Frame):
                               name='zoom_in_expansion_ratio').grid(row=2, column=2, padx=10, pady=1, sticky='w')
         self.zoomin_options_frame.columnconfigure((0, 1, 2), weight=1)
 
-        self.brs_options_frame = FocusLabelFrame(master, text="BRS options")
+
+        self.brs_options_frame = FocusLabelFrame(master, text="Angiogenesis analysis options")
         self.brs_options_frame.pack(side=tk.TOP, fill=tk.X, padx=10, pady=3)
         menu = tk.OptionMenu(self.brs_options_frame, self.state['brs_mode'],
                              *self.brs_modes, command=self._change_brs_mode)
+
         menu.config(width=11)
         menu.grid(rowspan=2, column=0, padx=10)
         self.net_clicks_label = tk.Label(self.brs_options_frame, text="Network clicks")
@@ -188,6 +194,37 @@ class InteractiveDemoApp(ttk.Frame):
                 self.controller.set_image(image)
                 self.save_mask_btn.configure(state=tk.NORMAL)
                 self.load_mask_btn.configure(state=tk.NORMAL)
+
+    def morphological_analysis(self):
+        param_list = [
+            "Nb extrem",
+            "Nb nodes",
+            "Nb junctions",
+            "Nb master junction",
+            "Nb peaces",
+            "Nb master segments",
+            "Nb segments",
+            "Nb branches",
+            "Nb isol.seg",
+            "Tot length",
+            "Tot master segments length",
+            "Tot braching length",
+            "Tot segments length",
+            "Tot branches length",
+            "Tot isol branches length",
+            "Nb meshes",
+            "Tot meshes area",
+            "Mean meash size",
+            "Mesh index",
+            "Analysed area",
+            "Branching interval",]
+        self.morphologicalanalyzer.analyze(param_list, self.controller._result_mask)
+        image = self.controller.get_visualization(alpha_blend=self.state['alpha_blend'].get(),
+                                                  click_radius=self.state['click_radius'].get())
+        blend_image = self.morphologicalanalyzer.visualize(image)
+        if image is not None:
+            self.image_on_canvas.reload_image(Image.fromarray(blend_image), False)
+
 
     def _save_mask_callback(self):
         self.menubar.focus_set()

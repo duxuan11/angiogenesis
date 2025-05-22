@@ -98,8 +98,6 @@ class BasePredictor(object):
         # sparse_embeddings, dense_embeddings = self.model.get_visual_prompts_feats(prompt_feats,click1)
         # pred_logits = self.model(self.image_feats, prompt_feats
         #                                             ,sparse_embeddings, dense_embeddings)
-        print(self.prev_mask.shape)
-        print(prompt_feats.shape)
         end = time.time()
         pred_logits = self.model(self.image_feats, prompt_feats, self.external_feature)
         end1 = time.time()
